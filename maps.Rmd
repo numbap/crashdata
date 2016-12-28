@@ -1,0 +1,65 @@
+---
+title: "Leaflet"
+author: "Patrick"
+date: "December 27, 2016"
+output: html_document
+---
+
+# Planes Crash All The Time
+
+### It will probably happen to you
+
+
+It's the dirty secret nobody wants to talk about. 
+
+
+```{r, message=FALSE}
+library(leaflet)
+x <- read.csv("AviationDataUP.csv")
+x2 <- x[!is.na(x$Longitude),]
+x3 <- x2[, c(3, 4, 7, 8, 11, 15, 16, 24) ]
+
+planeIcon <- makeIcon(
+iconUrl = "death-skull-and-bones-icon.png",
+iconWidth = 31*215/230, iconHeight = 31,
+iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
+
+x3Fatal <- x3[!is.na(x3$Total.Fatal.Injuries),]
+fatalitysites = data.frame(
+lat = x3Fatal$Latitude,
+lng = x3Fatal$Longitude,
+labels = paste(x3Fatal$Event.Date, "-", x3Fatal$Make, "-", x3Fatal$Injury.Severity)
+)
+
+
+crashsites = data.frame(
+lat = x3$Latitude,
+lng = x3$Longitude,
+labels = paste(x3$Event.Date, "-", x3$Make, "-", x3$Injury.Severity)
+)
+
+m <- leaflet(fatalitysites) %>% addTiles %>% addMarkers(popup=~labels, icon = planeIcon) %>% addMarkers(clusterOptions = markerClusterOptions(fatalitysites)) %>% setView(lat = 40.7130, lng = 74.0132, zoom = 4)
+ 
+m
+
+```
+
+[This data was pulled from here.](https://www.kaggle.com/khsamaha/aviation-accident-database-synopses)
+
+Content
+
+The NTSB aviation accident database contains information from 1962 and later about civil aviation accidents and selected incidents within the United States, its territories and possessions, and in international waters.
+
+Acknowledgements
+
+Generally, a preliminary report is available online within a few days of an accident. Factual information is added when available, and when the investigation is completed, the preliminary report is replaced with a final description of the accident and its probable cause. Full narrative descriptions may not be available for dates before 1993, cases under revision, or where NTSB did not have primary investigative responsibility.
+
+Inspiration
+
+Hope it will teach us how to improve the quality and safety of traveling by Airplane.
+
+[Skull And Bones Icon comes from here.](http://www.uidownload.com/files/378/960/1020/death-skull-and-bones-icon.png)
+
+![Plane Crash](death-skull-and-bones-icon.png)
+
