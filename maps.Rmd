@@ -39,7 +39,7 @@ lng = x3$Longitude,
 labels = paste(x3$Event.Date, "-", x3$Make, "-", x3$Injury.Severity)
 )
 
-m <- leaflet(fatalitysites) %>% addTiles %>% addMarkers(popup=~labels, icon = planeIcon) %>% addMarkers(clusterOptions = markerClusterOptions(fatalitysites)) %>% setView(lat = 40.7130, lng = -74.0132, zoom = 4)
+m <- leaflet(fatalitysites) %>% addTiles %>% addMarkers(popup=~labels, icon = planeIcon) %>% addMarkers(clusterOptions = markerClusterOptions(crashsites)) %>% setView(lat = 40.7130, lng = -74.0132, zoom = 4)
  
 m
 
